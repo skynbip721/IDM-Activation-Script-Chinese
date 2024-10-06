@@ -562,14 +562,14 @@ call :add_key
 
 if %frz%==0 call :register_IDM
 
-::call :download_files
-::if not defined _fileexist (
-::%eline%
-::echo 错误：无法使用 IDM 下载文件。
-::echo:
-::echo 帮助: %mas%IAS-Help#troubleshoot
-::goto :done
-::)
+call :download_files
+if not defined _fileexist (
+%eline%
+echo 错误：无法使用 IDM 下载文件。
+echo:
+echo 帮助: %mas%IAS-Help#troubleshoot
+goto :done
+)
 
 %psc% "$sid = '%_sid%'; $HKCUsync = %HKCUsync%; $lockKey = 1; $deleteKey = $null; $f=[io.file]::ReadAllText('!_batp!') -split ':regscan\:.*';iex ($f[1])"
 
@@ -631,12 +631,9 @@ echo:
 echo 添加注册信息中...
 echo:
 
-::set /a fname = %random% %% 9999 + 1000
-::set /a lname = %random% %% 9999 + 1000
-::set email=%fname%.%lname%@tonec.com
-set fname=Internet Download
-set lname=Manager
-set email=Tonec FZE
+set /a fname = %random% %% 9999 + 1000
+set /a lname = %random% %% 9999 + 1000
+set email=%fname%.%lname%@tonec.com
 
 for /f "delims=" %%a in ('%psc% "$key = -join ((Get-Random -Count  20 -InputObject ([char[]]('ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789'))));$key = ($key.Substring(0,  5) + '-' + $key.Substring(5,  5) + '-' + $key.Substring(10,  5) + '-' + $key.Substring(15,  5) + $key.Substring(20));Write-Output $key" %nul6%') do (set key=%%a)
 
