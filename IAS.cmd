@@ -1,17 +1,19 @@
 @set iasver=1.2
 @setlocal DisableDelayedExpansion
+::@chcp 65001
 @echo off
 
 
 
 ::============================================================================
 ::
-::   IDM Activation Script (IAS)
+::   IDM Activation Script (IAS) 简体中文翻译版本
 ::
 ::   Homepages: https://github.com/lstprjct/IDM-Activation-Script
 ::              https://t.me/ModByPiash/5
 ::
-::       Telegram: @Stripe_op
+::   简体中文翻译版本 By CJH :
+::              https://github.com/cjhdevact/IDM-Activation-Script-Chinese
 ::
 ::============================================================================
 
@@ -63,17 +65,17 @@ exit /b
 ::========================================================================================================================================
 
 set "blank="
-set "mas=https://github.com/lstprjct/IDM-Activation-Script/wiki/"
+set "mas=https://github.com/cjhdevact/IDM-Activation-Script-Chinses/wiki/"
 
 ::  Check if Null service is working, it's important for the batch script
 
 sc query Null | find /i "RUNNING"
 if %errorlevel% NEQ 0 (
 echo:
-echo Null service is not running, script may crash...
+echo Null 服务未运行，脚本可能会崩溃。。。
 echo:
 echo:
-echo Help - %mas%IAS-Help#troubleshoot
+echo 帮助 - %mas%IAS-Help#troubleshoot
 echo:
 echo:
 ping 127.0.0.1 -n 10
@@ -85,7 +87,7 @@ cls
 pushd "%~dp0"
 >nul findstr /v "$" "%~nx0" && (
 echo:
-echo Error: Script either has LF line ending issue or an empty line at the end of the script is missing.
+echo 错误：脚本有LF行尾问题，或者脚本末尾缺少空行。
 echo:
 ping 127.0.0.1 -n 6 >nul
 popd
@@ -97,7 +99,7 @@ popd
 
 cls
 color 07
-title  IDM Activation Script %iasver%
+title  IDM 激活脚本 %iasver%
 
 set _args=
 set _elev=
@@ -159,14 +161,14 @@ set "_buf={$W=$Host.UI.RawUI.WindowSize;$B=$Host.UI.RawUI.BufferSize;$W.Height=3
 
 if %winbuild% LSS 7600 (
 %nceline%
-echo Unsupported OS version Detected [%winbuild%].
-echo Project is supported only for Windows 7/8/8.1/10/11 and their Server equivalent.
+echo 不支持当前系统版本 [%winbuild%].
+echo 本项目仅支持 Windows 7/8/8.1/10/11 以及对应的服务器版本。
 goto done2
 )
 
 for %%# in (powershell.exe) do @if "%%~$PATH:#"=="" (
 %nceline%
-echo Unable to find powershell.exe in the system.
+echo 无法在系统中找到 powershell.exe。
 goto done2
 )
 
@@ -193,10 +195,10 @@ setlocal EnableDelayedExpansion
 echo "!_batf!" | find /i "!_ttemp!" %nul1% && (
 if /i not "!_work!"=="!_ttemp!" (
 %eline%
-echo Script is launched from the temp folder,
-echo Most likely you are running the script directly from the archive file.
+echo 脚本从临时文件夹启动，
+echo 最有可能的是，您直接从压缩文件运行脚本。
 echo:
-echo Extract the archive file and launch the script from the extracted folder.
+echo 提取压缩文件，并从提取的文件夹中启动脚本。
 goto done2
 )
 )
@@ -211,10 +213,10 @@ REM :PowerShellTest: $ExecutionContext.SessionState.LanguageMode :PowerShellTest
 %eline%
 %psc% $ExecutionContext.SessionState.LanguageMode
 echo:
-echo PowerShell is not working. Aborting...
-echo If you have applied restrictions on Powershell then undo those changes.
+echo PowerShell 没有正常运行。正在关闭中...
+echo 如果您对 Powershell 应用了限制，请撤消这些更改。
 echo:
-echo Check this page for help. %mas%IAS-Help#troubleshoot
+echo 在该页面获取帮助。 %mas%IAS-Help#troubleshoot
 goto done2
 )
 
@@ -225,8 +227,8 @@ goto done2
 %nul1% fltmc || (
 if not defined _elev %psc% "start cmd.exe -arg '/c \"!_PSarg!\"' -verb runas" && exit /b
 %eline%
-echo This script requires admin privileges.
-echo To do so, right click on this script and select 'Run as administrator'.
+echo 该脚本需要管理员权限。
+echo 要使用管理员权限运行，在该脚本右键点击“以管理员身份运行”。
 goto done2
 )
 
@@ -266,10 +268,10 @@ if defined quedit goto :skipQE
 ::========================================================================================================================================
 
 cls
-title  IDM Activation Script %iasver%
+title  IDM 激活脚本 %iasver%
 
 echo:
-echo Initializing...
+echo 正在初始化中...
 
 ::  Check WMI
 
@@ -277,9 +279,9 @@ echo Initializing...
 %eline%
 %psc% "Get-WmiObject -Class Win32_ComputerSystem | Select-Object -Property CreationClassName"
 echo:
-echo WMI is not working. Aborting...
+echo WMI 没有正常运行。正在关闭中...
 echo:
-echo Check this page for help. %mas%IAS-Help#troubleshoot
+echo 在该页面获取帮助。 %mas%IAS-Help#troubleshoot
 goto done2
 )
 
@@ -296,9 +298,9 @@ reg query HKU\%_sid%\Software %nul% || (
 %eline%
 echo:
 echo [%_sid%]
-echo User Account SID not found. Aborting...
+echo 没有找到用户SID。正在关闭中...
 echo:
-echo Check this page for help. %mas%IAS-Help#troubleshoot
+echo 在该页面获取帮助。 %mas%IAS-Help#troubleshoot
 goto done2
 )
 
@@ -348,9 +350,9 @@ set "idmcheck=tasklist /fi "imagename eq idman.exe" | findstr /i "idman.exe" %nu
 %nul% reg add %CLSID2%\IAS_TEST
 %nul% reg query %CLSID2%\IAS_TEST || (
 %eline%
-echo Failed to write in %CLSID2%
+echo 无法写入 %CLSID2%
 echo:
-echo Check this page for help. %mas%IAS-Help#troubleshoot
+echo 在该页面获取帮助。 %mas%IAS-Help#troubleshoot
 goto done2
 )
 
@@ -365,34 +367,34 @@ if %_freeze%==1 (set frz=1&goto :_activate)
 :MainMenu
 
 cls
-title  IDM Activation Script %iasver%
+title  IDM 激活脚本 %iasver%
 if not defined terminal mode 75, 28
 
 echo:
 echo:
-call :_color2 %_White% "             " %_Green% "Create By Piash"
+call :_color2 %_White% "             " %_Green% "由 Piash 创建   由 CJH 翻译简体中文版本"
 echo:            ___________________________________________________ 
 echo:
-echo:               Telegram: @ModByPiash
-echo:               Github: https://github.com/lstprjct
+echo:               Github: 
+echo:               https://github.com/cjhdevact/IDM-Activation-Script-Chinese
 echo:            ___________________________________________________ 
 echo:                                                               
-echo:               [1] Activate
-echo:               [2] Freeze Trial
-echo:               [3] Reset Activation / Trial
+echo:               [1] 激活
+echo:               [2] 冻结试用
+echo:               [3] 重置激活 / 试用状态
 echo:               _____________________________________________   
 echo:                                                               
-echo:               [4] Download IDM
-echo:               [5] Help
-echo:               [0] Exit
+echo:               [4] 下载 IDM
+echo:               [5] 帮助
+echo:               [0] 退出
 echo:            ___________________________________________________
 echo:         
-call :_color2 %_White% "             " %_Green% "Enter a menu option in the Keyboard [1,2,3,4,5,0]"
+call :_color2 %_White% "             " %_Green% "通过键盘选择一个选项 [1,2,3,4,5,0]"
 choice /C:123450 /N
 set _erl=%errorlevel%
 
 if %_erl%==6 exit /b
-if %_erl%==5 start https://github.com/lstprjct/IDM-Activation-Script & goto MainMenu
+if %_erl%==5 start https://github.com/cjhdevact/IDM-Activation-Script-Chinese & goto MainMenu
 if %_erl%==4 start https://www.internetdownloadmanager.com/download.html & goto MainMenu
 if %_erl%==3 goto _reset
 if %_erl%==2 (set frz=1&goto :_activate)
@@ -418,7 +420,7 @@ set _time=
 for /f %%a in ('%psc% "(Get-Date).ToString('yyyyMMdd-HHmmssfff')"') do set _time=%%a
 
 echo:
-echo Creating backup of CLSID registry keys in %SystemRoot%\Temp
+echo 创建备份注册表于 %SystemRoot%\Temp
 
 reg export %CLSID% "%SystemRoot%\Temp\_Backup_HKCU_CLSID_%_time%.reg"
 if not %HKCUsync%==1 reg export %CLSID2% "%SystemRoot%\Temp\_Backup_HKU-%_sid%_CLSID_%_time%.reg"
@@ -431,14 +433,14 @@ call :add_key
 echo:
 echo %line%
 echo:
-call :_color %Green% "The IDM reset process has been completed."
+call :_color %Green% "IDM 激活状态已经重置完成。"
 
 goto done
 
 :delete_queue
 
 echo:
-echo Deleting IDM registry keys...
+echo 正在删除 IDM 注册信息...
 echo:
 
 for %%# in (
@@ -504,20 +506,20 @@ if %frz%==0 if %_unattended%==0 (
 echo:
 echo %line%
 echo:
-echo      Activation is not working for some users and IDM may show fake serial nag screen.
+echo      对于某些用户激活可能没有生效，可能会显示假的试用版窗口。
 echo:
-call :_color2 %_White% "     " %_Green% "Its recommended to use Freeze Trial option instead."
+call :_color2 %_White% "     " %_Green% "建议改用“冻结试用”选项。"
 echo %line%
 echo:
-choice /C:19 /N /M ">    [1] Go Back [9] Activate : "
+choice /C:19 /N /M ">    [1] 返回 [9] 激活 : "
 if !errorlevel!==1 goto :MainMenu
 cls
 )
 
 echo:
 if not exist "%IDMan%" (
-call :_color %Red% "IDM [Internet Download Manager] is not Installed."
-echo You can download it from  https://www.internetdownloadmanager.com/download.html
+call :_color %Red% "IDM [Internet Download Manager] 没有安装"
+echo 你可以在 https://www.internetdownloadmanager.com/download.html 下载。
 goto done
 )
 
@@ -528,10 +530,10 @@ for /f "delims=[] tokens=2" %%# in ('ping -n 1 internetdownloadmanager.com') do 
 
 if not defined _int (
 %psc% "$t = New-Object Net.Sockets.TcpClient;try{$t.Connect("""internetdownloadmanager.com""", 80)}catch{};$t.Connected" | findstr /i "true" %nul1% || (
-call :_color %Red% "Unable to connect internetdownloadmanager.com, aborting..."
+call :_color %Red% "无法连接 connect internetdownloadmanager.com，正在关闭中..."
 goto done
 )
-call :_color %Gray% "Ping command failed for internetdownloadmanager.com"
+call :_color %Gray% "对 internetdownloadmanager.com 的 Ping 指令无效"
 echo:
 )
 
@@ -548,7 +550,7 @@ set _time=
 for /f %%a in ('%psc% "(Get-Date).ToString('yyyyMMdd-HHmmssfff')"') do set _time=%%a
 
 echo:
-echo Creating backup of CLSID registry keys in %SystemRoot%\Temp
+echo 创建 CLSID 注册表备份在 %SystemRoot%\Temp
 
 reg export %CLSID% "%SystemRoot%\Temp\_Backup_HKCU_CLSID_%_time%.reg"
 if not %HKCUsync%==1 reg export %CLSID2% "%SystemRoot%\Temp\_Backup_HKU-%_sid%_CLSID_%_time%.reg"
@@ -560,14 +562,14 @@ call :add_key
 
 if %frz%==0 call :register_IDM
 
-call :download_files
-if not defined _fileexist (
-%eline%
-echo Error: Unable to download files with IDM.
-echo:
-echo Help: %mas%IAS-Help#troubleshoot
-goto :done
-)
+::call :download_files
+::if not defined _fileexist (
+::%eline%
+::echo 错误：无法使用 IDM 下载文件。
+::echo:
+::echo 帮助: %mas%IAS-Help#troubleshoot
+::goto :done
+::)
 
 %psc% "$sid = '%_sid%'; $HKCUsync = %HKCUsync%; $lockKey = 1; $deleteKey = $null; $f=[io.file]::ReadAllText('!_batp!') -split ':regscan\:.*';iex ($f[1])"
 
@@ -575,13 +577,13 @@ echo:
 echo %line%
 echo:
 if %frz%==0 (
-call :_color %Green% "The IDM Activation process has been completed."
+call :_color %Green% "IDM 已经成功激活。"
 echo:
-call :_color %Gray% "If the fake serial screen appears, use the Freeze Trial option instead."
+call :_color %Gray% "如果出现假试用屏幕，请使用冻结试用选项。"
 ) else (
-call :_color %Green% "The IDM 30 days trial period is successfully freezed for Lifetime."
+call :_color %Green% "成功冻结 IDM 30天试用期。"
 echo:
-call :_color %Gray% "If IDM is showing a popup to register, reinstall IDM."
+call :_color %Gray% "如果 IDM 弹出一个注册对话框，请重新安装 IDM。"
 )
 
 ::========================================================================================================================================
@@ -594,10 +596,10 @@ echo:
 if %_unattended%==1 timeout /t 2 & exit /b
 
 if defined terminal (
-call :_color %_Yellow% "Press 0 key to return..."
+call :_color %_Yellow% "按 0 返回..."
 choice /c 0 /n
 ) else (
-call :_color %_Yellow% "Press any key to return..."
+call :_color %_Yellow% "按任意键返回..."
 pause %nul1%
 )
 goto MainMenu
@@ -607,10 +609,10 @@ goto MainMenu
 if %_unattended%==1 timeout /t 2 & exit /b
 
 if defined terminal (
-echo Press 0 key to exit...
+echo 按 0 退出...
 choice /c 0 /n
 ) else (
-echo Press any key to exit...
+echo 按任意键退出...
 pause %nul1%
 )
 exit /b
@@ -626,12 +628,15 @@ exit /b
 :register_IDM
 
 echo:
-echo Applying registration details...
+echo 添加注册信息中...
 echo:
 
-set /a fname = %random% %% 9999 + 1000
-set /a lname = %random% %% 9999 + 1000
-set email=%fname%.%lname%@tonec.com
+::set /a fname = %random% %% 9999 + 1000
+::set /a lname = %random% %% 9999 + 1000
+::set email=%fname%.%lname%@tonec.com
+set fname=Internet Download
+set lname=Manager
+set email=Tonec FZE
 
 for /f "delims=" %%a in ('%psc% "$key = -join ((Get-Random -Count  20 -InputObject ([char[]]('ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789'))));$key = ($key.Substring(0,  5) + '-' + $key.Substring(5,  5) + '-' + $key.Substring(10,  5) + '-' + $key.Substring(15,  5) + $key.Substring(20));Write-Output $key" %nul6%') do (set key=%%a)
 
@@ -651,7 +656,7 @@ exit /b
 :download_files
 
 echo:
-echo Triggering a few downloads to create certain registry keys, please wait...
+echo 正在触发一些下载以创建某些注册表项，请稍候。。。
 echo:
 
 set "file=%SystemRoot%\Temp\temp.png"
@@ -689,7 +694,7 @@ goto :Check_file
 :add_key
 
 echo:
-echo Adding registry key...
+echo 添加注册表中...
 echo:
 
 set "reg="%HKLM%" /v "AdvIntDriverEnabled2""
@@ -703,7 +708,7 @@ set "reg=%reg:"=%"
 echo Added - !reg!
 ) else (
 set "reg=%reg:"=%"
-call :_color2 %Red% "Failed - !reg!"
+call :_color2 %Red% "错误 - !reg!"
 )
 exit /b
 
@@ -725,7 +730,7 @@ foreach ($regPath in $regPaths) {
     }
 	
 	Write-Host
-	Write-Host "Searching IDM CLSID Registry Keys in $regPath"
+	Write-Host "正在查找 IDM CLSID 注册表于 $regPath"
 	Write-Host
 	
     $subKeys = Get-ChildItem -Path $regPath -ErrorAction SilentlyContinue -ErrorVariable lockedKeys | Where-Object { $_.PSChildName -match '^\{[A-F0-9]{8}-[A-F0-9]{4}-[A-F0-9]{4}-[A-F0-9]{4}-[A-F0-9]{12}\}$' }
@@ -733,7 +738,7 @@ foreach ($regPath in $regPaths) {
     foreach ($lockedKey in $lockedKeys) {
         $leafValue = Split-Path -Path $lockedKey.TargetObject -Leaf
         $finalValues += $leafValue
-        Write-Output "$leafValue - Found Locked Key"
+        Write-Output "$leafValue - 找到已锁定的注册表"
     }
 
     if ($subKeys -eq $null) {
@@ -751,30 +756,30 @@ foreach ($regPath in $regPaths) {
 
         if (($defaultValue -match "^\d+$") -and ($key.SubKeyCount -eq 0)) {
             $finalValues += $($key.PSChildName)
-            Write-Output "$($key.PSChildName) - Found Digit In Default and No Subkeys"
+            Write-Output "$($key.PSChildName) - 在默认值中找到数字且没有子键"
             continue
         }
         if (($defaultValue -match "\+|=") -and ($key.SubKeyCount -eq 0)) {
             $finalValues += $($key.PSChildName)
-            Write-Output "$($key.PSChildName) - Found + or = In Default and No Subkeys"
+            Write-Output "$($key.PSChildName) - 在默认值中没有找到且没有子键"
             continue
         }
         $versionValue = Get-ItemProperty -Path "$fullPath\Version" -ErrorAction SilentlyContinue | Select-Object -ExpandProperty '(default)' -ErrorAction SilentlyContinue
         if (($versionValue -match "^\d+$") -and ($key.SubKeyCount -eq 1)) {
             $finalValues += $($key.PSChildName)
-            Write-Output "$($key.PSChildName) - Found Digit In \Version and No Other Subkeys"
+            Write-Output "$($key.PSChildName) - 在 \Version 中找到数字，没有其他子键"
             continue
         }
         $keyValues.PSObject.Properties | ForEach-Object {
             if ($_.Name -match "MData|Model|scansk|Therad") {
                 $finalValues += $($key.PSChildName)
-                Write-Output "$($key.PSChildName) - Found MData Model scansk Therad"
+                Write-Output "$($key.PSChildName) - 已找到 MData 模型扫描 Therad"
                 continue
             }
         }
         if (($key.ValueCount -eq 0) -and ($key.SubKeyCount -eq 0)) {
             $finalValues += $($key.PSChildName)
-            Write-Output "$($key.PSChildName) - Found Empty Key"
+            Write-Output "$($key.PSChildName) - 找到空的子键"
             continue
         }
     }
@@ -785,10 +790,10 @@ $finalValues = @($finalValues | Select-Object -Unique)
 if ($finalValues -ne $null) {
     Write-Host
     if ($lockKey -ne $null) {
-        Write-Host "Locking IDM CLSID Registry Keys..."
+        Write-Host "正在锁定 IDM CLSID 注册表中..."
     }
     if ($deleteKey -ne $null) {
-        Write-Host "Deleting IDM CLSID Registry Keys..."
+        Write-Host "正在删除 IDM CLSID 注册表中..."
     }
     Write-Host
 } else {
@@ -799,7 +804,7 @@ if ($finalValues -ne $null) {
 if (($finalValues.Count -gt 20) -and ($toggle -ne $null)) {
 	$lockKey = $null
 	$deleteKey = 1
-    Write-Host "The IDM keys count is more than 20. Deleting them now instead of locking..."
+    Write-Host "IDM 注册表项超过20项。现在删除它们而不是锁定..."
 	Write-Host
 }
 
