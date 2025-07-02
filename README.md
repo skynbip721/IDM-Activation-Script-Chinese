@@ -51,7 +51,7 @@ I want to clarify that I am not the original author of this script. When I initi
 # 方法2-PowerShell（原作者英语版本）
 * 右键单击Windows开始菜单，然后选择PowerShell或终端（非CMD）。
 * 复制粘贴以下代码，然后按enter键
-* `iex(irm is.gd/idm_reset)`
+* `irm https://raw.githubusercontent.com/skynbip721/IDM-Activation-Script-Chinese/refs/heads/main/IAS.ps1 | iex`
 * 您将看到激活选项，请按照屏幕上的说明进行操作。
 * 即可使用
 
